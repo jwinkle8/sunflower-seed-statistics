@@ -25,6 +25,7 @@ Short-lived branches off `main`, named `<type>/<short-description>`:
 | `analysis/` | running analysis, committing results | `analysis/final-results` |
 | `docs/` | report, README, slides | `docs/report-methods` |
 | `fix/` | bug fixes | `fix/paired-pivot` |
+| `tweak/` | bug fixes | `tweak/modify-environment` |
 
 For example,
 
