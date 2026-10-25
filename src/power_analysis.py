@@ -9,6 +9,8 @@ from statsmodels.stats.power import TTestIndPower
 
 # --- Assumptions -------------------------------------------------------------
 # State the planned test, effect size (and where it came from), alpha, and power.
+# Planned test: Mann-Whitney U, two-sided, alpha = 0.05, power = 0.80 (chosen after the pilot assumption checks;
+# see src/analyze.py).
 # Pilot study results:
 # BIGS: mean = 11.757, std = 0.942
 # David: mean = 11.849, std = 1.049
