@@ -7,8 +7,10 @@
 | `processed/` | Cleaned, analysis-ready data. |
 | `final/` | Final datasets and results used in the report. |
 
-## Data dictionary
+## Datasets
 
-| Column | Type | Description | Units / allowed values |
-|---|---|---|---|
-| | | | |
+Each dataset has a metadata file next to it, a datasheet following Gebru et al. (2018), that contains its data dictionary.
+
+| File | Metadata |
+|---|---|
+| `raw/seed_lengths.csv` | [`raw/seed_lengths.md`](raw/seed_lengths.md) |
