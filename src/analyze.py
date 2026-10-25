@@ -19,8 +19,7 @@
 # --- Hypothesis test ----------------------------------------------------------
 # Planned test: Mann-Whitney U (Wilcoxon rank-sum), two independent groups.
 # Rationale (pilot): Shapiro-Wilk rejected normality for both pooled groups (BIGS p = 0.004, DAVID p = 0.032);
-# Q-Q plots show right skew. Levene (median-centered) did not reject equal variances (p = 0.536), so the groups
-# have similar spread and a median-shift interpretation is reasonable if shapes also match.
+# Q-Q plots show right skew. Levene did not reject equal variances (p = 0.536), so the groups have similar spread.
 
 
 # --- Confidence interval ------------------------------------------------------
