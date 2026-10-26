@@ -21,11 +21,11 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
 | `bigs_1` | `pa` | 134 |
 | `bigs_2` | `pa` | 134 |
 | `bigs_3` | `pa` | 134 |
-| `david` | `pa` | 402 |
-| `bigs_1` | `fl` | 134 |
-| `bigs_2` | `fl` | 134 |
-| `bigs_3` | `fl` | 134 |
-| `david` | `fl` | 402 |
+| `david_1` | `pa` | 402 |
+| `bigs_4` | `fl` | 134 |
+| `bigs_5` | `fl` | 134 |
+| `bigs_6` | `fl` | 134 |
+| `david_2` | `fl` | 402 |
 
 - **Sample vs. population:** A sample of kernels from a small number of retail bags. It is not a random sample
   of each product's full production, so bag-to-bag and lot-to-lot variation is only partly captured.
@@ -37,7 +37,7 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
 | Column | Type | Description | Units / allowed values |
 |---|---|---|---|
 | `seed_length` | float | Length of the shelled kernel, measured with digital calipers | mm, recorded to 0.1 mm; observed range 8.1–15.6 |
-| `bag` | string | The bag the kernel was sampled from: brand plus a bag id number | `bigs_1`, `bigs_2`, `bigs_3` (BIGS Dill Pickle); `david` (DAVID Original Jumbo) |
+| `bag` | string | The bag the kernel was sampled from: brand plus a bag id number | `bigs_1`, `bigs_2`, `bigs_3`, `bigs_4`, `bigs_5`, `bigs_6` (BIGS Dill Pickle); `david_1`, `david_2` (DAVID Original Jumbo) |
 | `state` | string | US state where the bag was purchased, as a lowercase postal code | `pa` (Pennsylvania), `fl` (Florida) |
 
 **Notes on the columns**
@@ -51,11 +51,11 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
   - Rows 2-135: Sourced from BIGS Dill Pickle "Bag 1" purchased at Pennsylvania Walmart on October 19, 2026.
   - Rows 136-269: Sourced from BIGS Dill Pickle "Bag 2" purchased at Pennsylvania Walmart on October 19, 2026.
   - Rows 270-403: Sourced from BIGS Dill Pickle "Bag 3" purchased at Pennsylvania Walmart on October 19, 2026.
-  - Rows 404-805: Sourced from DAVID Original Jumbo bag purchased at Pennsylvania Walmart on October 19, 2026.
-  - Rows 806-939: Sourced from BIGS Dill Pickle "Bag 1" purchased at Florida Walmart on October 19, 2026.
-  - Rows 940-1073: Sourced from BIGS Dill Pickle "Bag 2" purchased at Florida Walmart on October 19, 2026.
-  - Rows 1074-1207: Sourced from BIGS Dill Pickle "Bag 3" purchased at Florida Walmart on October 19, 2026.
-  - Rows 1208-1609: Sourced from DAVID Original Jumbo bag purchased at Florida Walmart on October 19, 2026.
+  - Rows 404-805: Sourced from DAVID Original Jumbo bag "David 1" purchased at Pennsylvania Walmart on October 19, 2026.
+  - Rows 806-939: Sourced from BIGS Dill Pickle "Bag 4" purchased at Florida Walmart on October 19, 2026.
+  - Rows 940-1073: Sourced from BIGS Dill Pickle "Bag 5" purchased at Florida Walmart on October 19, 2026.
+  - Rows 1074-1207: Sourced from BIGS Dill Pickle "Bag 6" purchased at Florida Walmart on October 19, 2026.
+  - Rows 1208-1609: Sourced from DAVID Original Jumbo bag "David 2" purchased at Florida Walmart on October 19, 2026.
 - **Sampling within a bag:** Seeds were sampled by random draw without replacement. Seeds with damaged shells or kernels were discarded. Kernels that were damaged during the hulling process were discarded.
 - **Measurement:** Digital calipers, read to 0.1 mm.
   - Rows 2-805: measured using a Pittsburgh 8" digital caliper; kernels were measured individually on their longer dimension from the wide base of the cotyledon to the tip of the radicle on the opposite end without zeroing the caliper; collected by @jwinkle8.
@@ -84,3 +84,4 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
 |---|---|
 | 2026-10-23 | Initial file: 804 Pennsylvania measurements (3 BIGS bags, 1 DAVID bag). |
 | 2026-10-24 | Added Florida measurements (3 BIGS bags, 1 DAVID bag). |
+| 2026-10-25 | Corrected bag numbering for Florida BIGS bags and added David 2 identifier. |
