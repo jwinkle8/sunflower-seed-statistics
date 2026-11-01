@@ -1,0 +1,101 @@
+Data cleaning report
+Generated: 2026-11-01T09:15:34
+Script:    src/clean.py
+Commit:    efdc1f5 (with uncommitted changes)
+Input:     data/raw/seed_lengths.csv
+Output:    data/processed/seed_lengths.csv
+
+Overall profile
+---------------
+Shape: (1608, 3)
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1608 entries, 0 to 1607
+Data columns (total 3 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   seed_length  1608 non-null   float64
+ 1   bag          1608 non-null   object 
+ 2   state        1608 non-null   object 
+dtypes: float64(1), object(2)
+memory usage: 37.8+ KB
+
+Descriptive statistics:
+           seed_length      bag state
+   count   1608.000000     1608  1608
+   unique          NaN        8     2
+   top             NaN  david_1    pa
+   freq            NaN      402   804
+   mean      11.533582      NaN   NaN
+   std        1.069730      NaN   NaN
+   min        8.100000      NaN   NaN
+   25%       10.900000      NaN   NaN
+   50%       11.500000      NaN   NaN
+   75%       12.200000      NaN   NaN
+   max       15.900000      NaN   NaN
+
+Quality checks
+--------------
+Duplicated rows: 1254 (expected; rows have no seed id, see note in clean.py)
+Missing values (all columns): 0
+Inconsistent values, seed_length is not numeric: 0
+Inconsistent values, state not in ['fl', 'pa']: 0
+Inconsistent values, bag does not match '^(bigs|david)_\d+$': 0
+Inconsistent values, seed_length not a multiple of 0.1 mm: 0
+Inconsistent values, bags recorded in more than one state: 0
+Seeds per bag match the expected design.
+
+Outliers (IQR x 1.5, within product)
+------------------------------------
+BIGS: fences [8.95, 14.15] mm, 15 flagged
+         seed_length     bag state product  outlier_iqr
+   11            8.4  bigs_1    pa    BIGS         True
+   7             8.5  bigs_1    pa    BIGS         True
+   914           8.5  bigs_4    fl    BIGS         True
+   87            8.6  bigs_1    pa    BIGS         True
+   254           8.6  bigs_2    pa    BIGS         True
+   12            8.7  bigs_1    pa    BIGS         True
+   109           8.9  bigs_1    pa    BIGS         True
+   132           8.9  bigs_1    pa    BIGS         True
+   211           8.9  bigs_2    pa    BIGS         True
+   216          14.3  bigs_2    pa    BIGS         True
+   338          14.3  bigs_3    pa    BIGS         True
+   1037         14.4  bigs_5    fl    BIGS         True
+   161          14.6  bigs_2    pa    BIGS         True
+   5            14.7  bigs_1    pa    BIGS         True
+   865          15.9  bigs_4    fl    BIGS         True
+DAVID: fences [8.55, 14.55] mm, 8 flagged
+         seed_length      bag state product  outlier_iqr
+   739           8.1  david_1    pa   DAVID         True
+   1210         14.8  david_2    fl   DAVID         True
+   718          14.9  david_1    pa   DAVID         True
+   1599         14.9  david_2    fl   DAVID         True
+   424          15.0  david_1    pa   DAVID         True
+   762          15.0  david_1    pa   DAVID         True
+   1208         15.0  david_2    fl   DAVID         True
+   456          15.6  david_1    pa   DAVID         True
+Box plot saved to figures/cleaning/outliers_boxplot.png
+
+Collection session comparison (PA vs. FL)
+-----------------------------------------
+By product and state:
+                  count    mean    std  min  median   max
+   product state                                         
+   BIGS    fl       402  11.477  0.920  8.5    11.4  15.9
+           pa       402  11.599  1.008  8.4    11.6  14.7
+   DAVID   fl       402  11.444  1.134  8.6    11.4  15.0
+           pa       402  11.615  1.190  8.1    11.6  15.6
+By bag:
+                          count    mean    std  min  median   max
+   product state bag                                             
+   BIGS    fl    bigs_4     134  11.386  0.908  8.5   11.30  15.9
+                 bigs_5     134  11.522  0.877  9.5   11.40  14.4
+                 bigs_6     134  11.522  0.972  9.1   11.45  13.6
+           pa    bigs_1     134  11.389  1.060  8.4   11.40  14.7
+                 bigs_2     134  11.816  1.004  8.6   11.80  14.6
+                 bigs_3     134  11.592  0.916  9.2   11.60  14.3
+   DAVID   fl    david_2    402  11.444  1.134  8.6   11.40  15.0
+           pa    david_1    402  11.615  1.190  8.1   11.60  15.6
+
+Save
+----
+Wrote 1608 rows to data/processed/seed_lengths.csv
