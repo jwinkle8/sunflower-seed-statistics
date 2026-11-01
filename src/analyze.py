@@ -3,9 +3,10 @@
 
 # --- Hypotheses ---------------------------------------------------------------
 # Fixed before main-study analysis, based on the pilot assumption checks (src/check_assumptions.py).
-# H0: BIGS Dill Pickle and DAVID Original Jumbo kernel lengths have the same distribution,
-#     i.e., P(BIGS > DAVID) = 0.5.
-# H1: The distributions differ: one product tends to have longer kernels, i.e., P(BIGS > DAVID) != 0.5.
+# H0: The BIGS Dill Pickle and DAVID Original Jumbo kernel length distributions are equal, i.e.,
+#     P(BIGS > DAVID) = 0.5.
+# H1: The BIGS Dill Pickle and DAVID Original Jumbo kernel length distributions are not equal, i.e.,
+#     P(BIGS > DAVID) != 0.5.
 # Two-sided.
 # alpha: 0.05
 # Groups: BIGS (three bags pooled) vs. DAVID. Seeds clustered within bags; DAVID is a single bag (see Limitations).
@@ -26,9 +27,6 @@
 
 
 # --- Effect size --------------------------------------------------------------
-
-
-# --- Post hoc tests (if appropriate) ------------------------------------------
 
 
 # --- Save results -------------------------------------------------------------
