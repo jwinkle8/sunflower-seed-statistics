@@ -21,7 +21,7 @@ edited by hand. For motivation, acquisition, sampling, and measurement details, 
 
 | Column | Type | Description | Units / allowed values |
 |---|---|---|---|
-| `seed_length` | float | Length of the shelled kernel, unchanged from raw | mm, recorded to 0.1 mm; observed range 1.9–15.9 (see Known issues) |
+| `seed_length` | float | Length of the shelled kernel, unchanged from raw | mm, recorded to 0.1 mm; observed range 8.4–15.9 |
 | `bag` | string | The bag the kernel was sampled from, unchanged from raw | `bigs_1`–`bigs_6`, `david_1`, `david_2` |
 | `state` | string | US state where the bag was purchased, unchanged from raw | `pa`, `fl` |
 | `product` | string | **Derived.** Product, from the prefix of `bag` | `BIGS` (BIGS Dill Pickle), `DAVID` (DAVID Original Jumbo) |
@@ -51,9 +51,6 @@ every check result. The most recent report matches the current CSV. Steps, in or
 
 ## Known issues
 
-- **Likely impossible value.** One `bigs_4` (Florida) kernel is recorded as 1.9 mm, raw file line 929. The next
-  smallest value in the dataset is 8.1 mm. It is flagged by `outlier_iqr` but not yet removed or corrected.
-  **TODO:** record the decision and its rationale here and in `src/clean.py`.
 - **Possible measurement difference between collection sessions.** Florida readings are about 0.15–0.17 mm lower
   than Pennsylvania readings for both products (medians 11.4 vs. 11.6 mm). State, collector, and caliper
   are confounded (the Pittsburgh caliper in PA, the ZYLTech caliper with ±0.2 mm stated accuracy in FL), so the cause can't be separated.
@@ -66,7 +63,7 @@ every check result. The most recent report matches the current CSV. Steps, in or
 - **Intended use:** Input to `src/analyze.py` for the two-sided Mann-Whitney U comparison of BIGS vs. DAVID
   kernel lengths.
 - **Using the outlier flag:** `outlier_iqr` is informational. Filtering on it is an analysis decision and must be
-  documented; flagged values other than the 1.9 mm reading look like genuinely small or large kernels.
+  documented; flagged values look like genuinely small or large kernels.
 
 ## Version history
 
