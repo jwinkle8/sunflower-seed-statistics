@@ -130,24 +130,21 @@ def plot_outliers_boxplot(df: pd.DataFrame, path=FIG_DIR / "outliers_boxplot.png
     """Save a box-and-whisker plot of seed length per product, matching the IQR outlier rule.
 
     Whiskers use the same multiplier as `flag_outliers_iqr`, so the points beyond them are exactly the rows flagged
-    in `outlier_iqr`. Whiskers stop at the most extreme value inside the fences; the dashed lines mark the fences.
+    in `outlier_iqr`. Whiskers stop at the most extreme value inside the fences.
     """
     products = sorted(df["product"].unique())
     data = [df.loc[df["product"] == p, "seed_length"] for p in products]
 
-    labels = [f"{p}\nn = {len(x)}, {df.loc[df['product'] == p, 'outlier_iqr'].sum()} flagged"
+    labels = [f"{p}\nn = {len(x)}, {df.loc[df['product'] == p, 'outlier_iqr'].sum()} outliers flagged"
               for p, x in zip(products, data)]
 
     fig, ax = plt.subplots(figsize=(6, 5))
     ax.boxplot(data, tick_labels=labels, whis=IQR_MULTIPLIER,
                flierprops={"marker": "o", "markersize": 4, "markerfacecolor": "tab:red", "markeredgecolor": "none"})
-    for i, x in enumerate(data, start=1):
-        q1, q3 = x.quantile([0.25, 0.75])
-        iqr = q3 - q1
-        for fence in (q1 - IQR_MULTIPLIER * iqr, q3 + IQR_MULTIPLIER * iqr):
-            ax.hlines(fence, i - 0.3, i + 0.3, colors="gray", linestyles="--", linewidth=1)
-    ax.set_ylabel("Seed length (mm)")
-    ax.set_title(f"Seed length by product (IQR x {IQR_MULTIPLIER}; dashed = fences, red = flagged)", fontsize=10)
+    ax.set_xticklabels(labels=labels, fontsize=10, fontweight='bold')
+    ax.tick_params(axis='y', labelsize=8)
+    ax.set_ylabel("Seed length (mm)", fontsize=10, fontweight="bold")
+    ax.set_title(f"Seed length by product", fontsize=12, fontweight='bold')
     ax.grid(axis="y", alpha=0.3)
 
     path.parent.mkdir(parents=True, exist_ok=True)
