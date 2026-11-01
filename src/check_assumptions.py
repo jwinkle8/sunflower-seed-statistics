@@ -98,12 +98,12 @@ def plot_normality(groups, path, title):
     for i, (name, x) in enumerate(groups.items()):
         hist_ax, qq_ax = axes[0, i], axes[1, i]
         hist_ax.hist(x, bins="auto", edgecolor="white")
-        hist_ax.set_title(f"{name} (n = {len(x)})")
-        hist_ax.set_xlabel("Length (mm)")
-        hist_ax.set_ylabel("Count")
+        hist_ax.set_title(f"{name} (n = {len(x)})", fontsize=12)
+        hist_ax.set_xlabel("Length (mm)", fontsize=10)
+        hist_ax.set_ylabel("Count", fontsize=10)
         stats.probplot(x, dist="norm", plot=qq_ax)
-        qq_ax.set_title(f"{name}: normal Q-Q")
-    fig.suptitle(title)
+        qq_ax.set_title(f"{name}: normal Q-Q", fontsize=12)
+    fig.suptitle(title, fontsize=14, fontweight='bold')
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
@@ -136,8 +136,8 @@ def main():
     print(shapiro_table(products).round(4).to_string(index=False))
     print("BIGS bag level:")
     print(shapiro_table(bags).round(4).to_string(index=False))
-    plot_normality(products, FIG_DIR / "normality_product.png", "Normality by product")
-    plot_normality(bags, FIG_DIR / "normality_bigs_bags.png", "Normality by BIGS bag")
+    plot_normality(products, FIG_DIR / "normality_product.png", "Normality-check plots by product")
+    plot_normality(bags, FIG_DIR / "normality_bigs_bags.png", "Normality-check plots by BIGS bag")
 
     print(f"\nLevene's test, median-centered (H0: equal variances; alpha = {ALPHA})")
     levene = pd.DataFrame([
