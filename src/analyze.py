@@ -164,7 +164,11 @@ def run_analysis():
 
     print_header(f"Location shift (Hodges-Lehmann, {GROUP_1} - {GROUP_2})")
     hl, hl_lower, hl_upper = hodges_lehmann(x, y)
-    print(f"Median of pairwise differences: {hl:.2f} mm, {1 - ALPHA:.0%} CI [{hl_lower:.2f}, {hl_upper:.2f}] mm")
+    print(f"Hodges-Lehmann estimate: {hl:.2f} mm")
+    print(f"Lower bound: {hl_lower:.2f} mm")
+    print(f"Upper bound: {hl_upper:.2f} mm")
+    print(f"Confidence level: {1 - ALPHA:.0%}")
+    print(f"CI width: {hl_upper - hl_lower:.2f} mm")
 
     print_header("Effect size")
     es = effect_size(x, y)
