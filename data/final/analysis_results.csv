@@ -1,0 +1,2 @@
+n_bigs,n_david,alpha,u_bigs,p_value,reject_h0,hl_shift_mm,hl_ci_lower_mm,hl_ci_upper_mm,prob_superiority,prob_superiority_ci_lower,prob_superiority_ci_upper,rank_biserial,rank_biserial_ci_lower,rank_biserial_ci_upper
+804,804,0.05,327347.0,0.6565116878573583,False,0.0,-0.1,0.1,0.5064029974505581,0.47804507934040485,0.5347609155607113,0.012805994901116113,-0.04390984131919029,0.06952183112142252

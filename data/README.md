@@ -15,3 +15,4 @@ Each dataset has a metadata file next to it, a datasheet following Gebru et al. 
 |---|---|
 | `raw/seed_lengths.csv` | [`raw/seed_lengths.md`](raw/seed_lengths.md) |
 | `processed/seed_lengths.csv` | [`processed/seed_lengths.md`](processed/seed_lengths.md) |
+| `final/seed_lengths.csv` | [`final/seed_lengths.md`](final/seed_lengths.md) |
