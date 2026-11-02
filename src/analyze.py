@@ -87,6 +87,14 @@ def tie_corrected_sd_u(x, y):
     return np.sqrt(n1 * n2 / 12 * ((n + 1) - tie_term))
 
 
+def u_z_score(u, x, y):
+    """Return (expected U, sd of U, z) under H0, with the continuity correction used by mann_whitney."""
+    expected_u = len(x) * len(y) / 2
+    sd_u = tie_corrected_sd_u(x, y)
+    z = (u - expected_u - np.sign(u - expected_u) * 0.5) / sd_u
+    return expected_u, sd_u, z
+
+
 def hodges_lehmann(x, y, alpha=ALPHA):
     """Return (estimate, lower, upper) for the BIGS - DAVID location shift."""
     diffs = np.sort(np.subtract.outer(x, y).ravel())
@@ -160,7 +168,12 @@ def run_analysis():
     test = mann_whitney(x, y)
     decision = "Reject H0" if test.pvalue < ALPHA else "Fail to reject H0"
     print(f"n: {GROUP_1} = {len(x)}, {GROUP_2} = {len(y)}")
-    print(f"U ({GROUP_1}) = {test.statistic:.1f}, p = {test.pvalue:.4g}, alpha = {ALPHA}: {decision}")
+    expected_u, sd_u, z = u_z_score(test.statistic, x, y)
+    print(f"U ({GROUP_1}) = {test.statistic:.1f}")
+    print(f"Expected U under H0 = n1 * n2 / 2 = {expected_u:.1f}")
+    print(f"SD of U (tie-corrected) = {sd_u:.2f}")
+    print(f"z = {z:.3f} (continuity-corrected)")
+    print(f"p = {test.pvalue:.4g}, alpha = {ALPHA}: {decision}")
 
     print_header(f"Location shift (Hodges-Lehmann, {GROUP_1} - {GROUP_2})")
     hl, hl_lower, hl_upper = hodges_lehmann(x, y)
