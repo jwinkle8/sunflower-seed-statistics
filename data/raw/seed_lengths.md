@@ -36,7 +36,7 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
 
 | Column | Type | Description | Units / allowed values |
 |---|---|---|---|
-| `seed_length` | float | Length of the shelled kernel, measured with digital calipers | mm, recorded to 0.1 mm; observed range 8.1–15.6 |
+| `seed_length` | float | Length of the shelled kernel, measured with digital calipers | mm, recorded to 0.1 mm; observed range 8.1–15.9 |
 | `bag` | string | The bag the kernel was sampled from: brand plus a bag id number | `bigs_1`, `bigs_2`, `bigs_3`, `bigs_4`, `bigs_5`, `bigs_6` (BIGS Dill Pickle); `david_1`, `david_2` (DAVID Original Jumbo) |
 | `state` | string | US state where the bag was purchased, as a lowercase postal code | `pa` (Pennsylvania), `fl` (Florida) |
 
@@ -66,7 +66,6 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
 ## Preprocessing
 
 - None. This is the raw file and must not be edited by hand after collection (see `CONTRIBUTING.md`).
-  Any corrections are made in `src/clean.py`.
 
 ## Uses
 
@@ -85,3 +84,4 @@ in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `
 | 2026-10-23 | Initial file: 804 Pennsylvania measurements (3 BIGS bags, 1 DAVID bag). |
 | 2026-10-24 | Added Florida measurements (3 BIGS bags, 1 DAVID bag). |
 | 2026-10-25 | Corrected bag numbering for Florida BIGS bags and added David 2 identifier. |
+| 2026-10-25 | Corrected an entry originally recorded as 1.9 mm but was logged in handwritten entries as 11.9. |
