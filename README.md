@@ -88,3 +88,12 @@ Notes:
 
 All changes go through branches and pull requests, and both authors author and review PRs. For information on how to contribute, see
 [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Disclosure of the use of generative AI
+
+Parts of this project were created with the help generative AI tools, particularly Claude and Claude Code, powered primarily by the Opus and Sonnet 5 models. Our primary uses of generative AI tools involved:
+
+- Creation of project scaffolding
+- Research of nonparametric statistical methods capable of meeting our experiments given the constraints we identified (such as failure to meet parametric assumptions)
+- Stress-testing experimental design by asking for additional limitations aside from the ones we identified
+- Initial implementation of statistical methods
