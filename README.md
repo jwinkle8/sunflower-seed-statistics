@@ -1,5 +1,9 @@
 # Do BIGS and DAVID sunflower kernels differ in length?
 
+<p align="center">
+  <img src="figures/analysis/effect_estimates.png" width="100%">
+</p>
+
 Project 2 for Duke University AIPI 510: Data Sourcing (Fall 2026)
 
 Authors: [@calebbmcneill](https://github.com/calebbmcneill) (Caleb McNeill),
