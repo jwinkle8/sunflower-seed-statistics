@@ -7,6 +7,10 @@ from datetime import datetime
 from pathlib import Path
 from textwrap import indent
 
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -19,6 +23,7 @@ PROCESSED_CSV = ROOT / "data" / "processed" / "seed_lengths.csv"
 FINAL_CSV = ROOT / "data" / "final" / "seed_lengths.csv"
 RESULTS_CSV = ROOT / "data" / "final" / "analysis_results.csv"
 REPORT_DIR = ROOT / "data" / "final"
+FIG_DIR = ROOT / "figures" / "analysis"
 
 # --- Hypotheses ---------------------------------------------------------------
 # Fixed before main-study analysis, based on the pilot assumption checks (src/check_assumptions.py).
@@ -37,6 +42,7 @@ REPORT_DIR = ROOT / "data" / "final"
 
 ALPHA = 0.05
 GROUP_1, GROUP_2 = "BIGS", "DAVID"
+RESOLUTION_MM = 0.1  # caliper readings are recorded to 0.1 mm
 
 
 def load_processed(path=PROCESSED_CSV):
@@ -116,6 +122,56 @@ def effect_size(x, y, alpha=ALPHA):
     }
 
 
+# --- Figures ------------------------------------------------------------------
+MARK_COLOR = "#1f4e79"
+REFERENCE_COLOR = "0.4"
+
+
+def plot_estimate(ax, estimate, lower, upper, null_value, xlabel, label_fmt):
+    """Draw one point estimate with its CI as a horizontal dot-and-whisker, with a dashed line at the null value."""
+    ax.axvline(null_value, color=REFERENCE_COLOR, linestyle="--", linewidth=1, zorder=1)
+    ax.errorbar(estimate, 0, xerr=[[estimate - lower], [upper - estimate]], fmt="o", color=MARK_COLOR,
+                markersize=8, elinewidth=2, capsize=6, capthick=2, zorder=3)
+    label = f"{label_fmt.format(estimate)}  [{label_fmt.format(lower)}, {label_fmt.format(upper)}]"
+    ax.annotate(label.replace("-", "-"), (estimate, 0), xytext=(0, 14), textcoords="offset points", ha="center",
+                fontsize=9, bbox={"boxstyle": "square,pad=0.2", "facecolor": "white", "edgecolor": "none"}, zorder=4)
+
+    ax.set_xlabel(xlabel, fontsize=10, fontweight="bold")
+    ax.set_yticks([])
+    ax.set_ylim(-1, 1)
+    ax.tick_params(axis="x", labelsize=8)
+    ax.grid(axis="x", alpha=0.3)
+    for side in ("left", "right", "top"):
+        ax.spines[side].set_visible(False)
+
+
+def plot_effect_estimates(results: dict, path=FIG_DIR / "effect_estimates.png"):
+    """Save the Hodges-Lehmann shift and the probability of superiority, each with its CI, side by side."""
+    ci_pct = f"{1 - results['alpha']:.0%}"
+    fig, (ax_shift, ax_prob) = plt.subplots(1, 2, figsize=(9, 2.8))
+
+    # Shade one caliper resolution step either side of zero: shifts inside it are below what was measured.
+    plot_estimate(ax_shift, results["hl_shift_mm"], results["hl_ci_lower_mm"], results["hl_ci_upper_mm"],
+                  null_value=0, xlabel=f"Location shift, {GROUP_1} - {GROUP_2} (mm)", label_fmt="{:.2f}")
+    ax_shift.set_xlim(-0.25, 0.25)
+
+    plot_estimate(ax_prob, results["prob_superiority"], results["prob_superiority_ci_lower"],
+                  results["prob_superiority_ci_upper"], null_value=0.5,
+                  xlabel=f"P({GROUP_1} > {GROUP_2}) + ½ P(tie)", label_fmt="{:.3f}")
+    ax_prob.set_xlim(0.44, 0.56)
+
+    ax_shift.set_title("Hodges-Lehmann estimate", fontsize=10)
+    ax_prob.set_title("Probability of superiority", fontsize=10)
+    fig.suptitle(f"{GROUP_1} vs. {GROUP_2} kernel length: estimates with {ci_pct} CIs "
+                 f"(n = {results['n_bigs']:.0f} per product)", fontsize=12, fontweight="bold")
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    print(f"Figure saved to {path.relative_to(ROOT)}")
+
+
 # --- Save results -------------------------------------------------------------
 def save_final_data(src=PROCESSED_CSV, dst=FINAL_CSV):
     """Copy the processed data, unchanged, to data/final/ as the dataset used in the report."""
@@ -136,7 +192,7 @@ def print_run_info(generated: datetime):
     print(f"Script:    {Path(__file__).relative_to(ROOT)}")
     print(f"Commit:    {git_revision()}")
     print(f"Input:     {PROCESSED_CSV.relative_to(ROOT)}")
-    print(f"Output:    {FINAL_CSV.relative_to(ROOT)}, {RESULTS_CSV.relative_to(ROOT)}")
+    print(f"Output:    {FINAL_CSV.relative_to(ROOT)}, {RESULTS_CSV.relative_to(ROOT)}, {FIG_DIR.relative_to(ROOT)}/")
 
 
 def main():
@@ -150,7 +206,7 @@ def main():
 
 
 def run_analysis():
-    """Run every analysis step in order, printing results, and save the final data and results."""
+    """Run every analysis step in order, printing results, and save the figure, final data, and results."""
     df, x, y = load_processed()
 
     print_header("Descriptive statistics")
@@ -174,14 +230,19 @@ def run_analysis():
     print(f"Rank-biserial r = {es['rank_biserial']:.3f}, "
           f"{1 - ALPHA:.0%} CI [{es['rank_biserial_ci_lower']:.3f}, {es['rank_biserial_ci_upper']:.3f}]")
 
-    print_header("Save")
-    save_final_data()
-    save_results({
+    results = {
         "n_bigs": len(x), "n_david": len(y), "alpha": ALPHA,
         "u_bigs": test.statistic, "p_value": test.pvalue, "reject_h0": test.pvalue < ALPHA,
         "hl_shift_mm": hl, "hl_ci_lower_mm": hl_lower, "hl_ci_upper_mm": hl_upper,
         **es,
-    })
+    }
+
+    print_header("Figures")
+    plot_effect_estimates(results)
+
+    print_header("Save")
+    save_final_data()
+    save_results(results)
 
 
 if __name__ == "__main__":

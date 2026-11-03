@@ -1,0 +1,45 @@
+Statistical analysis report
+Generated: 2026-11-02T19:18:12
+Script:    src/analyze.py
+Commit:    92779c3 (with uncommitted changes)
+Input:     data/processed/seed_lengths.csv
+Output:    data/final/seed_lengths.csv, data/final/analysis_results.csv, figures/analysis/
+
+Descriptive statistics
+----------------------
+By product:
+            count    mean    std  min    q1  median    q3   max
+   product                                                     
+   BIGS       804  11.538  0.966  8.4  10.9    11.5  12.2  15.9
+   DAVID      804  11.529  1.165  8.1  10.8    11.5  12.3  15.6
+By product and state:
+                  count    mean    std  min    q1  median    q3   max
+   product state                                                     
+   BIGS    fl       402  11.477  0.920  8.5  10.9    11.4  12.1  15.9
+           pa       402  11.599  1.008  8.4  11.0    11.6  12.3  14.7
+   DAVID   fl       402  11.444  1.134  8.6  10.7    11.4  12.2  15.0
+           pa       402  11.615  1.190  8.1  10.9    11.6  12.4  15.6
+
+Hypothesis test (Mann-Whitney U, two-sided)
+-------------------------------------------
+n: BIGS = 804, DAVID = 804
+U (BIGS) = 327347.0, p = 0.6565, alpha = 0.05: Fail to reject H0
+
+Location shift (Hodges-Lehmann, BIGS - DAVID)
+---------------------------------------------
+Median of pairwise differences: 0.00 mm, 95% CI [-0.10, 0.10] mm
+
+Effect size
+-----------
+P(BIGS > DAVID) + 0.5 P(tie) = 0.506, 95% CI [0.478, 0.535]
+U / (n1 * n2) = 0.506 (should match the line above)
+Rank-biserial r = 0.013, 95% CI [-0.044, 0.070]
+
+Figures
+-------
+Figure saved to figures/analysis/effect_estimates.png
+
+Save
+----
+Copied data/processed/seed_lengths.csv to data/final/seed_lengths.csv
+Wrote results to data/final/analysis_results.csv
