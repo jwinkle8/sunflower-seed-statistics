@@ -138,7 +138,7 @@ def plot_estimate(ax, estimate, lower, upper, null_value, xlabel, label_fmt):
     ax.errorbar(estimate, 0, xerr=[[estimate - lower], [upper - estimate]], fmt="o", color=MARK_COLOR,
                 markersize=8, elinewidth=2, capsize=6, capthick=2, zorder=3)
     label = f"{label_fmt.format(estimate)}  [{label_fmt.format(lower)}, {label_fmt.format(upper)}]"
-    ax.annotate(label.replace("-", "-"), (estimate, 0), xytext=(0, 14), textcoords="offset points", ha="center",
+    ax.annotate(label, (estimate, 0), xytext=(0, 14), textcoords="offset points", ha="center",
                 fontsize=9, bbox={"boxstyle": "square,pad=0.2", "facecolor": "white", "edgecolor": "none"}, zorder=4)
 
     ax.set_xlabel(xlabel, fontsize=10, fontweight="bold")
@@ -155,7 +155,6 @@ def plot_effect_estimates(results: dict, path=FIG_DIR / "effect_estimates.png"):
     ci_pct = f"{1 - results['alpha']:.0%}"
     fig, (ax_shift, ax_prob) = plt.subplots(1, 2, figsize=(9, 2.8))
 
-    # Shade one caliper resolution step either side of zero: shifts inside it are below what was measured.
     plot_estimate(ax_shift, results["hl_shift_mm"], results["hl_ci_lower_mm"], results["hl_ci_upper_mm"],
                   null_value=0, xlabel=f"Location shift, {GROUP_1} - {GROUP_2} (mm)", label_fmt="{:.2f}")
     ax_shift.set_xlim(-0.25, 0.25)

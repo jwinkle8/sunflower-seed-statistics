@@ -7,7 +7,7 @@ history something we can point to in the grade.
 
 1. **Never commit directly to `main`.** All changes go through a pull request and require one approval.
 2. **Raw data should be append-only.** Once a collection session ends, `data/raw/` files are not edited by hand, except to correct a transcription error verified against the original collection record. Each correction must be explained in the PR description and logged in the dataset's datasheet.
-3. **Generated files come from scripts.** Never hand-edit anything in `data/interim/`, `data/processed/`, or `data/final/`.
+3. **Generated files come from scripts.** Never hand-edit anything in `data/processed/` or `data/final/`.
    Rerun the script and commit the output in the same PR as the code change that produced it.
 4. **Don't move the goalposts.** Changes to the analysis plan after data collection starts
    (α, hypotheses, choice of test, effect size) must be called out in the PR description and in the report's
@@ -24,7 +24,7 @@ Short-lived branches off `main`, named `<type>/<short-description>`:
 | `analysis/` | running analysis, committing results | `analysis/final-results` |
 | `docs/` | report, README, slides | `docs/report-methods` |
 | `fix/` | bug fixes | `fix/paired-pivot` |
-| `tweak/` | bug fixes | `tweak/modify-environment` |
+| `tweak/` | minor consistency changes and improvements | `tweak/modify-environment` |
 
 For example,
 
