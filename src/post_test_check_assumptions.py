@@ -5,7 +5,7 @@ Reads data/processed/seed_lengths.csv and writes figures to figures/post_test/.
 Assumptions checked:
   - independence: seeds are clustered within bags, and the bags within each product are compared to judge whether pooling them is reasonable;
   - measurement scale: lengths are continuous but recorded to 0.1 mm, so ties are counted;
-  - similar spread and shape: Levene and Fligner-Killeen tests, plus skewness, IQR, and an ECDF comparison. The
+  - similar spread and shape: Levene and Fligner-Killeen tests, plus skewness, IQR, and a Kolmogorov-Smirnov shape comparison. The
     Hodges-Lehmann shift interpretation needs the two distributions to have the same shape, differing only in location;
   - normality (descriptive only): Shapiro-Wilk, to confirm why a rank-based test was used.
 """
@@ -83,22 +83,10 @@ def clustering_table(df):
 
 def kruskal_row(label, groups):
     h, p = stats.kruskal(*groups.values())
-    return {"comparison": label, "H": h, "p": p, "same_distribution_at_alpha": p >= ALPHA}
+    return {"comparison": label, "H": h, "p": p, "same_distribution_at_alpha":     p >= ALPHA}
 
 
-def plot_bag_boxes(df, path):
-    order = sorted(df["bag"].unique(), key=lambda b: (df.loc[df["bag"] == b, "product"].iloc[0], b))
-    data = [df.loc[df["bag"] == bag, "seed_length"] for bag in order]
-    fig, ax = plt.subplots(figsize=(9, 4.5))
-    ax.boxplot(data, tick_labels=order)
-    ax.set_ylabel("Length (mm)")
-    ax.set_title("Seed length by bag")
-    fig.tight_layout()
-    fig.savefig(path, dpi=150)
-    plt.close(fig)
-
-
-# --- Measurement scale and ties -----------------------------------------------
+    # --- Measurement scale and ties -----------------------------------------------
 
 
 def tie_summary(df):
@@ -140,26 +128,6 @@ def shape_after_centering(groups):
     res = stats.ks_2samp(x - np.median(x), y - np.median(y))
     return pd.DataFrame([{"test": "KS on median-centered lengths", "D": res.statistic, "p": res.pvalue,
                           "same_shape_at_alpha": res.pvalue >= ALPHA}])
-
-
-def plot_distributions(groups, path):
-    """Overlaid density histograms, ECDFs, and median-centered ECDFs for the two products."""
-    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
-    for name, x in groups.items():
-        xs = np.sort(x)
-        cum = np.arange(1, len(xs) + 1) / len(xs)
-        axes[0].hist(x, bins="auto", density=True, alpha=0.5, label=f"{name} (n = {len(x)})")
-        axes[1].step(xs, cum, where="post", label=name)
-        axes[2].step(xs - np.median(x), cum, where="post", label=name)
-    axes[0].set(title="Density histogram", xlabel="Length (mm)", ylabel="Density")
-    axes[1].set(title="ECDF", xlabel="Length (mm)", ylabel="Cumulative proportion")
-    axes[2].set(title="ECDF, median-centered", xlabel="Length minus group median (mm)")
-    for ax in axes:
-        ax.legend()
-    fig.suptitle(f"{GROUP_1} vs. {GROUP_2}: spread and shape", fontsize=14, fontweight="bold")
-    fig.tight_layout()
-    fig.savefig(path, dpi=150)
-    plt.close(fig)
 
 
 # --- Normality ----------------------------------------------------------------
@@ -206,7 +174,6 @@ def main():
     print(f"\nKruskal-Wallis across bags within each product (H0: bags share a distribution; alpha = {ALPHA})")
     kruskal = pd.DataFrame([kruskal_row(f"{p} bags", bag_groups(df, p)) for p in (GROUP_1, GROUP_2)])
     print(kruskal.round(4).to_string(index=False))
-    plot_bag_boxes(df, FIG_DIR / "bag_boxplots.png")
 
     print("\nMeasurement scale and ties (lengths recorded to 0.1 mm)")
     print(pd.DataFrame([tie_summary(df)]).round(4).to_string(index=False))
@@ -217,7 +184,6 @@ def main():
     print(spread_tests(products).round(4).to_string(index=False))
     print(f"\nSame-shape check for a pure location shift (H0: same shape; alpha = {ALPHA})")
     print(shape_after_centering(products).round(4).to_string(index=False))
-    plot_distributions(products, FIG_DIR / "distributions_by_product.png")
 
     print(f"\nShapiro-Wilk normality test (H0: data are normal; alpha = {ALPHA})")
     print(shapiro_table(products).round(4).to_string(index=False))
