@@ -2,7 +2,7 @@
 
 Metadata for the raw sunflower seed kernel measurements, following the *Datasheets for Datasets* framework
 (Gebru et al., 2018). This file describes the raw data exactly as collected. Cleaning steps are recorded
-in `src/clean.py` and in the metadata for downstream files in `data/interim/`, `data/processed/`, and `data/final/`.
+in `src/clean.py` and in the metadata for downstream files in `data/processed/` and `data/final/`.
 
 ## Motivation
 

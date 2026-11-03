@@ -1,4 +1,4 @@
-"""Data cleaning: data/raw/ -> data/interim/ -> data/processed/"""
+"""Data cleaning: data/raw/ -> data/processed/"""
 
 import subprocess
 import sys
