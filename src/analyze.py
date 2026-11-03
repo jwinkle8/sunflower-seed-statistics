@@ -39,11 +39,8 @@ FIG_DIR = ROOT / "figures" / "analysis"
 # more weight than any other value, and the flagged values look like genuinely small or large kernels.
 # Direction: every result here is BIGS relative to DAVID (BIGS - DAVID, P(BIGS > DAVID)). The power analysis
 # (src/power_analysis.py) uses P(DAVID > BIGS), which is 1 minus the value reported here.
-
 ALPHA = 0.05
 GROUP_1, GROUP_2 = "BIGS", "DAVID"
-RESOLUTION_MM = 0.1  # caliper readings are recorded to 0.1 mm
-
 
 def load_processed(path=PROCESSED_CSV):
     """Return the processed data and the (BIGS, DAVID) seed lengths as arrays."""
@@ -91,6 +88,14 @@ def tie_corrected_sd_u(x, y):
     _, tie_counts = np.unique(np.concatenate([x, y]), return_counts=True)
     tie_term = (tie_counts ** 3 - tie_counts).sum() / (n * (n - 1))
     return np.sqrt(n1 * n2 / 12 * ((n + 1) - tie_term))
+
+
+def u_z_score(u, x, y):
+    """Return (expected U, sd of U, z) under H0, with the continuity correction used by mann_whitney."""
+    expected_u = len(x) * len(y) / 2
+    sd_u = tie_corrected_sd_u(x, y)
+    z = (u - expected_u - np.sign(u - expected_u) * 0.5) / sd_u
+    return expected_u, sd_u, z
 
 
 def hodges_lehmann(x, y, alpha=ALPHA):
@@ -216,11 +221,21 @@ def run_analysis():
     test = mann_whitney(x, y)
     decision = "Reject H0" if test.pvalue < ALPHA else "Fail to reject H0"
     print(f"n: {GROUP_1} = {len(x)}, {GROUP_2} = {len(y)}")
-    print(f"U ({GROUP_1}) = {test.statistic:.1f}, p = {test.pvalue:.4g}, alpha = {ALPHA}: {decision}")
+    
+    expected_u, sd_u, z = u_z_score(test.statistic, x, y)
+    print(f"U ({GROUP_1}) = {test.statistic:.1f}")
+    print(f"Expected U under H0 = n1 * n2 / 2 = {expected_u:.1f}")
+    print(f"SD of U (tie-corrected) = {sd_u:.2f}")
+    print(f"z = {z:.3f} (continuity-corrected)")
+    print(f"p = {test.pvalue:.4g}, alpha = {ALPHA}: {decision}")
 
     print_header(f"Location shift (Hodges-Lehmann, {GROUP_1} - {GROUP_2})")
     hl, hl_lower, hl_upper = hodges_lehmann(x, y)
-    print(f"Median of pairwise differences: {hl:.2f} mm, {1 - ALPHA:.0%} CI [{hl_lower:.2f}, {hl_upper:.2f}] mm")
+    print(f"Hodges-Lehmann estimate: {hl:.2f} mm")
+    print(f"Lower bound: {hl_lower:.2f} mm")
+    print(f"Upper bound: {hl_upper:.2f} mm")
+    print(f"Confidence level: {1 - ALPHA:.0%}")
+    print(f"CI width: {hl_upper - hl_lower:.2f} mm")
 
     print_header("Effect size")
     es = effect_size(x, y)
@@ -243,7 +258,6 @@ def run_analysis():
     print_header("Save")
     save_final_data()
     save_results(results)
-
 
 if __name__ == "__main__":
     main()
