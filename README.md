@@ -97,3 +97,11 @@ Parts of this project were created with the help generative AI tools, particular
 - Research of nonparametric statistical methods capable of meeting our experiments given the constraints we identified (such as failure to meet parametric assumptions)
 - Stress-testing experimental design by asking for additional limitations aside from the ones we identified
 - Initial implementation of statistical methods
+
+## References
+
+- Gebru, T., Morgenstern, J., Vecchione, B., Wortman Vaughan, J., Wallach, H., Daumé III, H., & Crawford, K. (2021). Datasheets for datasets. Communications of the ACM, 64(12), 86–92. https://doi.org/10.1145/3458723 
+- Happ, M., Bathke, A. C., & Brunner, E. (2019). Optimal sample size planning for the Wilcoxon-Mann-Whitney test. Statistics in Medicine, 38(3), 363–375. https://doi.org/10.1002/sim.7983 
+- [Scipy Stats Documentation](https://docs.scipy.org/doc/scipy/reference/stats.html)
+- [Pandas Documentation](https://pandas.pydata.org/docs/)
+- [Matplotlib Documentation](https://matplotlib.org/stable/contents.html)
